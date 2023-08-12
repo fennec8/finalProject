@@ -29,28 +29,28 @@ cursor = db.cursor()
     # print(x)
 
 @app.route("/")
-# @login_required
 def index():
-        return render_template("index.html", style="/static/css/index.css")
+        return render_template("index.html", style="/static/css/index.css", title="Game of Words")
 
 
 @app.route("/game")
-# @login_required
 def game():
-        return render_template("game.html")
+        return render_template("game.html", title="Game of Words")
 
 
 @app.route("/register")
-# @login_required
 def register():
-        return render_template("register.html", style="/static/css/register.css")
+        return render_template("register.html", style="/static/css/register.css", title="Register for Game of Words")
 
 
 @app.route("/login")
-# @login_required
 def login():
-        return render_template("login.html")
+        return render_template("login.html", style="/static/css/login.css", title="Log in to Game of Words")
 
+
+@app.route("/about")
+def about():
+        return render_template("about.html", style="/static/css/index.css", title="About Game of Words")
 
 
 # Close connection to database

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="{{ style }}">
+    <link rel="icon" href="/static/images/logo.png">
+
+    <title>{{ title }}</title>
+</head>
+<body>
+    <main>
+        <div class="container">
+
+            <div class="container-logo">
+                <img src="/static/images/logo.png" alt="logo" title="Made this fennec myself long time ago :)">
+            </div>
+            
+            <div class="container-title">
+                <h1>Game of Words</h1>
+                <p>
+                    Hello, my name is <span>Benedykt</span>,
+                    I'm <span>18</span>
+                    and I'm from <span class="poland" title="polska gurom!">Poland</span>.
+                    This is my <span>final project</span>
+                    for <span>CS50!</span>
+                    <img class="cs50duck" src="/static/images/cs50duck.png" alt="cs50 duck" title="quack">
+                </p>
+            </div>
+
+        </div>
+    </main>
+
+    <nav>
+        <a href="/">Home</a>
+    </nav>
+
+    <style>
+        .poland {
+            background: linear-gradient(white, red);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .cs50duck {
+            width: 28px; 
+            height: 28px; 
+            margin: 0 0 -4px 2px;
+        }
+    </style>
+
+</body>
+</html>
