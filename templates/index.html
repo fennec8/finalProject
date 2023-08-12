@@ -3,9 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+
+    <link rel="stylesheet" href="{{ style }}">
+
+    <title>Game of Words</title>
 </head>
 <body>
-    
+    <main>
+        <div class="container">
+
+            <div class="container-logo">
+                <img src="/static/images/fennec.png" alt="logo" title="Made this fennec myself long time ago :)">
+            </div>
+            
+            <div class="container-title">
+                <h1>Game of Words</h1>
+                <p>Join <span>today</span> and play for <span>free</span></p>
+            </div>
+
+            <div class="container-form">
+                <a href="/game" class="btn-play">Play</a>
+                <div class="or">
+                    <span>or</span>
+                </div>
+                <a href="/register" class="btn-reg">Create account</a>
+                
+                <div>
+                    <span class="terms-box">
+                        By signing up, you agree to the 
+                        <span class="terms">Terms of Fun</span> and
+                        <span class="terms">Smile<br>Policy</span>, including
+                        <span class="terms">Cookies with Milk.</span>
+                    </span>
+                </div>
+
+                <p>Already have an account?</p>
+                <a href="/login" class="btn-log">Sign in</a>
+            </div>
+
+        </div>
+    </main>
+
+    <nav>
+        <a href="">About</a>
+    </nav>
+
+    {% block main %}{% endblock %}
+
+    <script></script>
+
 </body>
 </html>

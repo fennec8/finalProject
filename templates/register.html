@@ -1,0 +1,35 @@
+{% extends "index.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+    <div class="modal-bg">
+        <div class="modal">
+
+            <div class="back">
+                <a href="/">X</a>
+            </div>
+
+            <div class="form-box">
+                <h1>Create your account</h1>
+                <form action="">
+                    <div>
+                        <input type="email" name="email" placeholder="Email">
+                    </div>
+                    <div>
+                        <input type="text" name="username" placeholder="Username">
+                    </div>
+                    <div>
+                        <input type="password" name="password" placeholder="Password">
+                    </div>
+                    <div>
+                        <button class="btn-submit" type="submit">Create account</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
