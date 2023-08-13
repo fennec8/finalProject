@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="{{ style }}">
+    <link rel="stylesheet" href="{% block style %}/static/css/index.css{% endblock %}">
     <link rel="icon" href="/static/images/logo.png">
 
-    <title>{{ title }}</title>
+    <title>{% block title %}Game of Words{% endblock %}</title>
 </head>
 <body>
     <main>
@@ -50,8 +50,6 @@
     </nav>
 
     {% block main %}{% endblock %}
-
-    <script></script>
 
 </body>
 </html>

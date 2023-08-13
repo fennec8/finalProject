@@ -133,6 +133,7 @@ nav a:hover {
     margin-bottom: 2px;
     text-align: center;
     text-decoration: none;
+    transition: .2s;
 }
 
 .btn-log:hover,
@@ -152,16 +153,18 @@ nav a:hover {
     font-weight: 700;
     text-align: center;
     text-decoration: none;
-}
-
-.btn-play {
-    margin-bottom: 10px;
+    transition: .2s;
 }
 
 .btn-reg:hover {
     cursor: pointer;
     background-color: #427a3d;
 }
+
+.btn-play {
+    margin-bottom: 10px;
+}
+
 
 .terms-box {
     color: var(--grey);

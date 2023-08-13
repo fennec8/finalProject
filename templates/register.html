@@ -1,5 +1,13 @@
 {% extends "index.html" %}
 
+{% block style %}
+    /static/css/register.css
+{% endblock %}
+
+{% block title %}
+    Register for Game of Words
+{% endblock %}
+
 {% block main %}
     <div class="modal-bg">
         <div class="modal">
@@ -17,16 +25,25 @@
                 <h1>Create your account</h1>
                 <form action="/register" method="post">
                     <div>
-                        <input type="email" name="email" placeholder="Email">
+                        <input type="text" id="username" name="username" maxlength="50" autofocus placeholder="Username">
+                        <div class="invalid-div">
+                            <span class="invalid-span">What's your name?</span>
+                        </div>
                     </div>
                     <div>
-                        <input type="text" name="username" placeholder="Username">
+                        <input type="password" id="password" name="password" placeholder="Password">
+                        <div class="invalid-div">
+                            <span class="invalid-span">(8-30 characters, a number, uppercase letter, lowercase letter and symbol)</span>
+                        </div>
                     </div>
                     <div>
-                        <input type="password" name="password" placeholder="Password">
+                        <input type="email" id="email" name="email" placeholder="Email">
+                        <div class="invalid-div">
+                            <span class="invalid-span">Please enter a valid email.</span>
+                        </div>
                     </div>
                     <div>
-                        <button class="btn-submit" type="submit">Create account</button>
+                        <button class="btn-submit" id="btn" type="submit">Create account</button>
                     </div>
                     <div class="signup-div">
                         <p>Already have an account? <a href="/login">Sign in</a></p>
@@ -36,4 +53,6 @@
 
         </div>
     </div>
+
+    <script src="/static/js/register.js"></script>
 {% endblock %}

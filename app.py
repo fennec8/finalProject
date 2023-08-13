@@ -3,8 +3,6 @@ from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from mysql.connector import connect
 
-# from helpers import login_required
-
 # Configure application
 app = Flask(__name__)
 
@@ -23,34 +21,46 @@ db = connect(
 
 cursor = db.cursor()
 
-# cursor.execute("SELECT * FROM finalProject")
-
-# for x in cursor:
-    # print(x)
-
 @app.route("/")
 def index():
-        return render_template("index.html", style="/static/css/index.css", title="Game of Words")
+    return render_template("index.html", style="/static/css/index.css", title="Game of Words")
 
 
 @app.route("/game")
 def game():
-        return render_template("game.html", title="Game of Words")
+    return render_template("game.html", title="Game of Words")
 
 
-@app.route("/register")
+@app.route("/register", methods=["GET", "POST"])
 def register():
-        return render_template("register.html", style="/static/css/register.css", title="Register for Game of Words")
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        email = request.form.get("email")
+
+        # Ensure username or email doesn't already exist
+        cursor.execute("INSERT INTO users (username, password, email) VALUES (%s, %s, %s)", (username, generate_password_hash(password), email))
+        db.commit()
+        cursor.execute("SELECT * FROM users WHERE username = ? OR email = ?;", username, email)
+        db.commit()
+        result = cursor.fetchone()
+        if result is not None:
+            return render_template("register.html")
+        else:
+            return redirect("/game")
+    
+    else:
+        return render_template("register.html")
 
 
 @app.route("/login")
 def login():
-        return render_template("login.html", style="/static/css/login.css", title="Log in to Game of Words")
+    return render_template("login.html")
 
 
 @app.route("/about")
 def about():
-        return render_template("about.html", style="/static/css/index.css", title="About Game of Words")
+    return render_template("about.html")
 
 
 # Close connection to database
