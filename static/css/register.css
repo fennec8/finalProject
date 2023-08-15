@@ -1,5 +1,9 @@
 @import url("/static/css/index.css");
 
+:root {
+    --red: rgb(244, 33, 46);
+}
+
 .modal-bg {
     position: fixed;
     top: 0;
@@ -111,8 +115,8 @@ input:focus::placeholder {
 
 .invalid-input, 
 .invalid-input:focus {
-    border-color: #f4212e;
-    outline-color: #f4212e;
+    border-color: var(--red);
+    outline-color: var(--red);
 }
 
 .invalid-input:focus::placeholder {
@@ -120,7 +124,7 @@ input:focus::placeholder {
 }
 
 .invalid-span {
-    color: #f4212e;
+    color: var(--red);
     font-size: 14px;
     margin-left: 6px;
 }
@@ -129,4 +133,43 @@ input:focus::placeholder {
     pointer-events: none;
     background-color: var(--grey);
     user-select: none;
+}
+
+.register-failed-div {
+    background-color: rgb(146, 20, 28);
+    text-align: center;
+    line-height: 1.8;
+    margin-top: 8px;
+    /* Chrome and Safari */
+    -webkit-animation: hideAnimation ease-in 5s forwards;
+    /* Firefox */
+    -moz-animation: hideAnimation ease-in 5s forwards;
+    /* Opera */
+    -o-animation: hideAnimation ease-in 5s forwards;
+    animation: hideAnimation ease-in 5s forwards;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+}
+
+@keyframes hideAnimation {
+    0%   {opacity: 1;}
+    90%   {opacity: 1;}
+    100% {
+        opacity: 0;
+        display: none;
+    }
+}
+
+@-webkit-keyframes hideAnimation {
+    0%   {opacity: 1;}
+    90%   {opacity: 1;}
+    100% {
+        opacity: 0;
+        display: none;
+    }
+}
+
+.register-failed-span {
+    color: var(--white);
+    font-size: 18px;
 }

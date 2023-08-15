@@ -18,17 +18,18 @@ db = connect(
     host='localhost',
     database='finalProject'
 )
-
-cursor = db.cursor()
+# buffered=True - connector fetches all rows behind the scenes but you get only one,
+# so mysql db won't complain that you still have results to be fetched
+cursor = db.cursor(buffered=True)
 
 @app.route("/")
 def index():
-    return render_template("index.html", style="/static/css/index.css", title="Game of Words")
+    return render_template("index.html")
 
 
 @app.route("/game")
 def game():
-    return render_template("game.html", title="Game of Words")
+    return render_template("game.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -39,15 +40,26 @@ def register():
         email = request.form.get("email")
 
         # Ensure username or email doesn't already exist
-        cursor.execute("INSERT INTO users (username, password, email) VALUES (%s, %s, %s)", (username, generate_password_hash(password), email))
-        db.commit()
-        cursor.execute("SELECT * FROM users WHERE username = ? OR email = ?;", username, email)
+        cursor.execute("SELECT username, email FROM users WHERE username = %s OR email = %s;", (username, email))
         db.commit()
         result = cursor.fetchone()
+
         if result is not None:
-            return render_template("register.html")
-        else:
-            return redirect("/game")
+            if username == result[0]:
+                return render_template("register.html", regFailed="This username is already in use.")
+            elif email == result[1]:
+                return render_template("register.html", regFailed="This email is already in use.")
+            
+        # Add registered user to db
+        cursor.execute("INSERT INTO users (username, password, email) VALUES (%s, %s, %s);", (username, generate_password_hash(password), email,))
+        db.commit()
+        # Remember user that has registered
+        cursor.execute("SELECT id FROM users WHERE username = %s;", (username,))
+        db.commit()
+        result = cursor.fetchone()
+        session["user_id"] = result[0]
+
+        return render_template("index.html", account="You have successfully created an account!")
     
     else:
         return render_template("register.html")
@@ -64,4 +76,4 @@ def about():
 
 
 # Close connection to database
-db.close()
+# db.close()

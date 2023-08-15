@@ -23,6 +23,11 @@
 
             <div class="form-box">
                 <h1>Create your account</h1>
+
+                <div class="register-failed-div">
+                    <span class="register-failed-span">{{ regFailed }}</span>
+                </div>
+
                 <form action="/register" method="post">
                     <div>
                         <input type="text" id="username" name="username" maxlength="50" autofocus placeholder="Username">

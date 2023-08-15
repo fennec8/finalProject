@@ -180,3 +180,42 @@ nav a:hover {
 .terms:hover {
     text-decoration: underline;
 }
+
+.account-info-div {
+    background-color: rgb(83, 141, 78);
+    text-align: center;
+    line-height: 2;
+    /* Chrome and Safari */
+    -webkit-animation: hideAnimation ease-in 5s forwards;
+    /* Firefox */
+    -moz-animation: hideAnimation ease-in 5s forwards;
+    /* Opera */
+    -o-animation: hideAnimation ease-in 5s forwards;
+    animation: hideAnimation ease-in 5s forwards;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+}
+
+@keyframes hideAnimation {
+    0%   {opacity: 1;}
+    90%   {opacity: 1;}
+    100% {
+        opacity: 0;
+        display: none;
+    }
+}
+
+@-webkit-keyframes hideAnimation {
+    0%   {opacity: 1;}
+    90%   {opacity: 1;}
+    100% {
+        opacity: 0;
+        display: none;
+    }
+}
+
+.account-info-span {
+    color: var(--white);
+    font-size: 24px;
+    font-weight: 700;
+}
