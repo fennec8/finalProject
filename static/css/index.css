@@ -92,7 +92,7 @@ nav a:hover {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 12px;
+    margin: 12px 0;
     height: 20px;
     color: var(--white);
 }
@@ -120,8 +120,7 @@ nav a:hover {
     margin: 52px 0 14px 0;
 }
 
-.btn-log,
-.btn-play {
+.btn-clear {
     background-color: transparent;
     color: var(--green);
     width: 300px;
@@ -136,13 +135,12 @@ nav a:hover {
     transition: .2s;
 }
 
-.btn-log:hover,
-.btn-play:hover {
+.btn-clear:hover {
     cursor: pointer;
     background-color: rgba(83, 141, 78, .2);
 }
 
-.btn-reg {
+.btn-filled {
     background-color: var(--green);
     color: var(--white);
     width: 300px;
@@ -156,15 +154,10 @@ nav a:hover {
     transition: .2s;
 }
 
-.btn-reg:hover {
+.btn-filled:hover {
     cursor: pointer;
     background-color: #427a3d;
 }
-
-.btn-play {
-    margin-bottom: 10px;
-}
-
 
 .terms-box {
     color: var(--grey);

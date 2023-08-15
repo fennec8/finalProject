@@ -3,6 +3,8 @@ from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from mysql.connector import connect
 
+from helpers import login_required
+
 # Configure application
 app = Flask(__name__)
 
@@ -24,12 +26,14 @@ cursor = db.cursor(buffered=True)
 
 @app.route("/")
 def index():
-    return render_template("index.html")
-
-
-@app.route("/game")
-def game():
-    return render_template("game.html")
+    # session.clear()
+    session["user_id"] = 6
+    print(session.get("user_id"))
+    # If user is not logged in
+    if session.get("user_id") is None:
+        return render_template("index.html")
+    # If user is logged in
+    return redirect("/home") 
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -68,6 +72,23 @@ def register():
 @app.route("/login")
 def login():
     return render_template("login.html")
+
+@app.route("/logout")
+def logout():
+    # Forget any user_id
+    session.clear()
+    return redirect("/")
+
+
+@app.route("/home")
+@login_required
+def home():
+    return render_template("home.html")
+
+
+@app.route("/game")
+def game():
+    return render_template("game.html")
 
 
 @app.route("/about")
