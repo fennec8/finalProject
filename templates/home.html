@@ -4,14 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="{% block style %}/static/css/index.css{% endblock %}">
+    <link rel="stylesheet" href="{% block style %}/static/css/home.css{% endblock %}">
     <link rel="icon" href="/static/images/logo.png">
 
     <title>{% block title %}Game of Words{% endblock %}</title>
 </head>
 <body>
     <div class="account-info-div">
-        <span class="account-info-span">{{ account }}</span>
+        <span class="account-info-span">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </span>
     </div>
 
     <main>

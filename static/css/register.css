@@ -136,10 +136,11 @@ input:focus::placeholder {
 }
 
 .register-failed-div {
+    position: relative;
+    top: 8px;
     background-color: rgb(146, 20, 28);
     text-align: center;
     line-height: 1.8;
-    margin-top: 8px;
     /* Chrome and Safari */
     -webkit-animation: hideAnimation ease-in 5s forwards;
     /* Firefox */

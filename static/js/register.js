@@ -19,6 +19,7 @@ function username_validation() {
     if (!username.value) {
         username.classList.add('invalid-input');
         username.parentElement.querySelector(".invalid-div").style.display = "block";
+        valUsername = false;
     } else {
         username.classList.remove('invalid-input');
         username.parentElement.querySelector(".invalid-div").style.display = "none";
@@ -33,6 +34,7 @@ function password_validation() {
     if (!password.value.match(validPassword)) {
         password.classList.add('invalid-input');
         password.parentElement.querySelector(".invalid-div").style.display = "block";
+        valPassword = false;
     } else {
         password.classList.remove('invalid-input');
         password.parentElement.querySelector(".invalid-div").style.display = "none";
@@ -47,6 +49,7 @@ function email_validation() {
     if (!email.value.match(validEmail)) {
         email.classList.add('invalid-input');
         email.parentElement.querySelector(".invalid-div").style.display = "block";
+        valEmail = false;
     } else {
         email.classList.remove('invalid-input');
         email.parentElement.querySelector(".invalid-div").style.display = "none";
@@ -60,14 +63,14 @@ function email_validation() {
 function check_if_all_valid() {
     if (!(valUsername && valPassword && valEmail)) {
         btn.classList.add('btn-disabled');
-        btn.setAttribute('tabindex', '1');
+        btn.setAttribute('tabindex', '-1');
     } else {
         btn.classList.remove('btn-disabled');
-        btn.setAttribute('tabindex', '-1');
+        btn.removeAttribute('tabindex');
     }
 }
 
-// Listen for all events
+// Listen for events
 username.addEventListener('input', username_validation);
 password.addEventListener('input', password_validation);
 email.addEventListener('input', email_validation);

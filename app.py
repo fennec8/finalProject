@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request, session
+from flask import Flask, render_template, redirect, url_for, flash, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from mysql.connector import connect
@@ -26,12 +26,10 @@ cursor = db.cursor(buffered=True)
 
 @app.route("/")
 def index():
-    # session.clear()
-    session["user_id"] = 6
-    print(session.get("user_id"))
     # If user is not logged in
     if session.get("user_id") is None:
         return render_template("index.html")
+    
     # If user is logged in
     return redirect("/home") 
 
@@ -63,15 +61,40 @@ def register():
         result = cursor.fetchone()
         session["user_id"] = result[0]
 
-        return render_template("index.html", account="You have successfully created an account!")
+        flash("You have successfully created an account!")
+        return redirect(url_for("home"))
     
     else:
         return render_template("register.html")
 
 
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    return render_template("login.html")
+    # Forget any user_id
+    session.clear()
+
+    if request.method == "POST":
+        login = request.form.get("login")
+        password = request.form.get("password")
+
+        # Ensure login and password are correct
+        cursor.execute("SELECT * FROM users WHERE username = %s OR email = %s;", (login, login))
+        db.commit()
+        result = cursor.fetchone()
+
+        if result is None or not check_password_hash(result[2], password):
+            return render_template("login.html", logFailed="Invalid username and/or password.")
+        
+        # Remember which user has logged in
+        session["user_id"] = result[0]
+        print(session.get("user_id"))
+
+        # Redirect user to homepage
+        flash("You have successfully signed in!")
+        return redirect(url_for("home"))
+
+    else:
+        return render_template("login.html")
 
 @app.route("/logout")
 def logout():
