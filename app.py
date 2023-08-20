@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect, url_for, flash, request, ses
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from mysql.connector import connect
+import json
 
 from helpers import login_required
 
@@ -111,7 +112,10 @@ def home():
 
 @app.route("/game")
 def game():
-    return render_template("game.html")
+    cursor.execute("SELECT word FROM words ORDER BY RAND() LIMIT 1")
+    db.commit()
+    result = cursor.fetchone()[0]
+    return render_template("game.html", word=result)
 
 
 @app.route("/about")
