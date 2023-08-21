@@ -289,6 +289,7 @@
   
   .tileWriteAnimation {
     animation: tileWriteAnimation 100ms;
+    border-color: var(--borderLight);
   }
   
   @keyframes tileBgGrey {
