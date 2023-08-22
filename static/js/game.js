@@ -1,5 +1,3 @@
-import { WORDS } from "/static/js/wordle.js";
-
 const letters = document.querySelectorAll(".btn");
 const warningContainer = document.querySelector(".warning-container");
 const modal = document.querySelector(".modal");
@@ -8,6 +6,7 @@ const playBtn = document.querySelector(".playBtn");
 const nav = document.querySelector(".nav");
 const navCloseBtn = document.querySelector(".nav-closeBtn");
 const statsBtn = document.querySelector(".statsBtn");
+const chartBtn = document.querySelector(".chartBtn");
 
 const winWords = [
   "great",
@@ -35,7 +34,6 @@ class GameOfWords {
     this.rowsArray = rowsArray;
     this.tiles = Array.from(rowsArray[0].children);
     this.word = word;
-    console.log(word);
   }
 
   // fill first empty tile with letter
@@ -82,8 +80,10 @@ class GameOfWords {
         this.tiles[3].innerText,
         this.tiles[4].innerText
       ).toLowerCase();
-    if (!WORDS.includes(wordGuess)) this.showWarningDiv("Not in word list");
-    else this.checkRightLetters(wordGuess);
+    // const result = this.postWordList(wordGuess);
+    // console.log(this.postWordList(wordGuess));
+    // if (!this.postWordList(wordGuess)) this.showWarningDiv("Not in word list");
+    // else this.checkRightLetters(wordGuess);
   }
 
   // check if guessed word has right letters
@@ -221,6 +221,22 @@ class GameOfWords {
       warningContainer.removeChild(warningDiv);
     }, 1300);
   }
+
+  // async postWordList(wordGuess) {
+  //   try {
+  //     const response = await fetch("/postWordList", {
+  //       method: "POST", // or 'PUT'
+  //       headers: {"Content-Type": "application/json"},
+  //       body: JSON.stringify(wordGuess),
+  //     });
+  
+  //     const result = await response.json();
+  //     console.log("Success:", result);
+  //     return result;
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+  // }
 }
 
 const gameOfWords = new GameOfWords();
@@ -229,10 +245,15 @@ const gameOfWords = new GameOfWords();
 window.addEventListener("DOMContentLoaded", getRandomWord());
 
 // fetching random 5-letters word from jinja element
-function getRandomWord() {
-  let random = Math.floor(Math.random() * 5757);
-  let word = WORDS[random];
-  gameOfWords.startGame(word);
+async function getRandomWord() {
+  try {
+    const response = await fetch("/getWord")
+      .then(response => response.json())
+      console.log("Word received", response);
+      gameOfWords.startGame(response);
+  } catch (error) {
+    console.error("Error:", error);
+  }
 }
 
 // write letters using mouse
@@ -246,7 +267,9 @@ letters.forEach((letter) => {
 
 // get rid of outline on btns when clicking
 letters.forEach((letter) => {
-  letter.addEventListener("mousedown", () => letter.style.outline = "none");
+  letter.addEventListener("mousedown", () => {
+    letter.style.outline = "none"
+  });
 });
 
 let key;
@@ -258,7 +281,7 @@ document.addEventListener("keydown", (e) => {
 
   if (/^[a-z]+$/.test(e.key)) gameOfWords.writeLetter(e.key.toUpperCase());
   if (e.key === "Backspace") gameOfWords.deleteLetter();
-  if (e.key === "Enter") gameOfWords.checkEnoughLetters();
+  if (e.key === "Enter") gameOfWords.checkEnoughLetters(), e.preventDefault();
 });
 
 document.addEventListener("keyup", () => key = "");
@@ -267,6 +290,13 @@ navCloseBtn.addEventListener("click", () => nav.classList.remove("nav-toggle"));
 
 statsBtn.addEventListener("click", () => {
   nav.classList.remove("nav-toggle");
+  setTimeout(() => {
+    modal.classList.add("modal-toggle");
+    modalBg.classList.add("display");
+  });
+});
+
+chartBtn.addEventListener("click", () => {
   setTimeout(() => {
     modal.classList.add("modal-toggle");
     modalBg.classList.add("display");
@@ -298,3 +328,20 @@ document.addEventListener("click", (e) => {
           (e.target.matches(".hamBtn") || !e.target.closest(".nav"))
   ) { nav.classList.remove("nav-toggle") }
 });
+
+async function postStats(data) {
+  try {
+    const response = await fetch("/postStats", {
+      method: "POST", // or 'PUT'
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+    console.log("Success:", result);
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+const data = { username: "example" };
+postStats(data);

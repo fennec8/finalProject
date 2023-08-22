@@ -5,6 +5,7 @@
     --grey: #818384;
     --border: #3a3a3c;
     --borderLight: #565758;
+    --white: #fff;
   }
   
   *,
@@ -17,7 +18,7 @@
     background-color: var(--black);
     margin: 0;
     font-family: Calibri, sans-serif;
-    color: #fff;
+    color: var(--white);
     user-select: none;
     height: 100vh;
     overflow: hidden;
@@ -45,6 +46,11 @@
     font-size: 36px;
     font-weight: 700;
   }
+
+  .header-title a {
+    text-decoration: none;
+    color: var(--white);
+  }
   
   header button {
     padding: 0 2px;
@@ -52,8 +58,7 @@
   
   .hamburgerBtn,
   .questionBtn,
-  .chartBtn,
-  .settingsBtn {
+  .chartBtn {
     background-color: transparent;
     border: none;
     cursor: pointer;
@@ -62,15 +67,14 @@
   .hamburgerBtn svg {
     width: 20px;
     height: 20px;
-    fill: #fff;
+    fill: var(--white);
   }
   
   .questionBtn svg,
-  .chartBtn svg,
-  .settingsBtn svg {
+  .chartBtn svg {
     width: 28px;
     height: 28px;
-    fill: #fff;
+    fill: var(--white);
   }
   
   nav {
@@ -97,31 +101,34 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
-    padding: 16px 0 0 16px;
+    padding: 12px 0 0 12px;
   }
   
   .nav-title {
     display: flex;
+    width: 72px;
     justify-content: space-between;
-    width: 108px;
-    font-size: 24px;
-    font-weight: 700;
+  } 
+
+  .nav-title img {
+    width: 30px;
+    height: auto;
   }
-  
+
   .nav-logo::after {
     background-color: var(--borderLight);
     content: '';
     position: absolute;
-    top: 25px;
-    left: 49px;
+    top: 12px;
+    left: 48px;
     width: 1px;
-    height: 14px;
+    height: 26px;
   }
   
   .nav-closeBtn {
     width: 16px;
     height: 16px;
-    fill: #fff;
+    fill: var(--white);
     margin: 5px 16px 0 0;
     cursor: pointer;
   }
@@ -136,7 +143,7 @@
   .statsBtn {
     background-color: var(--green);
     font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
-    color: #fff;
+    color: var(--white);
     font-size: 16px;
     font-weight: 700;
     border: none;
@@ -174,7 +181,7 @@
   }
   
   .warningDiv {
-    background-color: #fff;
+    background-color: var(--white);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -412,7 +419,7 @@
     background-color: var(--grey);
     width: 46px;
     height: 58px;
-    color: #fff;
+    color: var(--white);
     font-weight: 700;
     border: none;
     border-radius: 6px;
@@ -432,7 +439,7 @@
   
   .notLetterKey svg {
     width: 22px;
-    fill: #fff;
+    fill: var(--white);
   }
   
   .keyHalf {
@@ -467,7 +474,7 @@
     position: absolute;
     width: 16px;
     height: 16px;
-    fill: #fff;
+    fill: var(--white);
     top: 0;
     right: 0;
     margin: 10px 12px 0 0;
@@ -578,7 +585,7 @@
   }
   
   .share a {
-    color: #fff;
+    color: var(--white);
   }
   
   .lastH1 {
@@ -590,7 +597,7 @@
     height: 50px;
     border: none;
     border-radius: 50px;
-    color: #fff;
+    color: var(--white);
     font-size: 16px;
     font-weight: 700;
     font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;

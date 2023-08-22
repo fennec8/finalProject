@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, flash, request, session
+from flask import Flask, render_template, redirect, url_for, flash, jsonify, make_response, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from mysql.connector import connect
@@ -43,7 +43,7 @@ def register():
         email = request.form.get("email")
 
         # Ensure username or email doesn't already exist
-        cursor.execute("SELECT username, email FROM users WHERE username = %s OR email = %s;", (username, email))
+        cursor.execute("SELECT username, email FROM users WHERE username = %s OR email = %s;", (username, email,))
         db.commit()
         result = cursor.fetchone()
 
@@ -79,7 +79,7 @@ def login():
         password = request.form.get("password")
 
         # Ensure login and password are correct
-        cursor.execute("SELECT * FROM users WHERE username = %s OR email = %s;", (login, login))
+        cursor.execute("SELECT * FROM users WHERE username = %s OR email = %s;", (login, login,))
         db.commit()
         result = cursor.fetchone()
 
@@ -123,5 +123,39 @@ def about():
     return render_template("about.html")
 
 
-# Close connection to database
-# db.close()
+@app.route("/postStats", methods=["POST"])
+def postStats():
+    
+  data = request.get_json()
+  print(data)
+
+  ben = {"name": "ben"}
+  print(ben)
+  ben = json.dumps(ben)
+  print(ben)
+
+  return data
+
+
+@app.route("/getWord", methods=["GET"])
+def getWord():
+  cursor.execute("SELECT word FROM words ORDER BY RAND() LIMIT 1")
+  db.commit()
+  result = cursor.fetchone()[0]
+  result = json.dumps(result)
+
+  return result
+
+
+@app.route("/postWordList", methods=["GET", "POST"])
+def postWordList():
+  word = request.get_json()
+  print(word)
+
+  cursor.execute("SELECT * FROM words WHERE word = %s;", (word,))
+  db.commit()
+  result = cursor.fetchone()
+  
+  result = json.dumps(result)
+
+  return result
