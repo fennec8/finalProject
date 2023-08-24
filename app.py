@@ -43,7 +43,10 @@ def register():
         email = request.form.get("email")
 
         # Ensure username or email doesn't already exist
-        cursor.execute("SELECT username, email FROM users WHERE username = %s OR email = %s;", (username, email,))
+        cursor.execute(
+            "SELECT username, email FROM users WHERE username = %s OR email = %s;", 
+            (username, email,)
+        )
         db.commit()
         result = cursor.fetchone()
 
@@ -54,13 +57,19 @@ def register():
                 return render_template("register.html", regFailed="This email is already in use.")
             
         # Add registered user to db
-        cursor.execute("INSERT INTO users (username, password, email) VALUES (%s, %s, %s);", (username, generate_password_hash(password), email,))
+        cursor.execute(
+            "INSERT INTO users (username, password, email) VALUES (%s, %s, %s);", 
+            (username, generate_password_hash(password), email,)
+        )
         db.commit()
         # Remember user that has registered
         cursor.execute("SELECT id FROM users WHERE username = %s;", (username,))
         db.commit()
         result = cursor.fetchone()
         session["user_id"] = result[0]
+        # Start new user's statistics
+        cursor.execute("INSERT INTO statistics (user_id) VALUES (%s);", (session["user_id"],))
+        db.commit()
 
         flash("You have successfully created an account!")
         return redirect(url_for("home"))
@@ -112,6 +121,7 @@ def home():
 
 @app.route("/game")
 def game():
+    # Get a random word from db
     cursor.execute("SELECT word FROM words ORDER BY RAND() LIMIT 1")
     db.commit()
     result = cursor.fetchone()[0]
@@ -125,14 +135,45 @@ def about():
 
 @app.route("/postStats", methods=["POST"])
 def postStats():
-    
+  # Save stats in db 
   data = request.get_json()
-  print(data)
+  guessed_in = "guessed_in" + str(data["guessed_in"])
 
-  ben = {"name": "ben"}
-  print(ben)
-  ben = json.dumps(ben)
-  print(ben)
+  if data["wins"] == "1": # Win stats
+      # Save dynamic data in dynamic columns
+      update_temp = str("UPDATE statistics SET played = played + 1, wins = wins + 1, current_streak = current_streak + 1,") + guessed_in + str("=%s+1 WHERE user_id=%s;")
+      update_data = (guessed_in, session["user_id"],)
+      cursor.execute(update_temp, update_data)
+      db.commit()
+      # Update streaks
+      cursor.execute(
+          "UPDATE statistics SET max_streak = current_streak WHERE current_streak > max_streak AND user_id=%s;",
+          (session["user_id"],)
+      )
+      db.commit()
+  else: # Lose stats
+      cursor.execute(
+          "UPDATE statistics SET played = played + 1, current_streak = 0 WHERE user_id=%s;", 
+          (session["user_id"],)
+      )
+      db.commit()
+  # Send data to display back to javascript
+  cursor.execute("SELECT * FROM statistics WHERE user_id=%s;", (session["user_id"],))
+  db.commit()
+  result = cursor.fetchone()
+  data = {
+      "played": result[1],
+      "wins": result[2],
+      "current_streak": result[3],
+      "max_streak": result[4],
+      "guessed_in1": result[5],
+      "guessed_in2": result[6],
+      "guessed_in3": result[7],
+      "guessed_in4": result[8],
+      "guessed_in5": result[9],
+      "guessed_in6": result[10],
+  }
+  data = json.dumps(data)
 
   return data
 
@@ -150,12 +191,15 @@ def getWord():
 @app.route("/postWordList", methods=["GET", "POST"])
 def postWordList():
   word = request.get_json()
-  print(word)
-
+  # If no word found - return false statement
   cursor.execute("SELECT * FROM words WHERE word = %s;", (word,))
   db.commit()
   result = cursor.fetchone()
-  
+  if result is None:
+      result = "false"
+      result = json.dumps(result)
+      return result
+  # Else return word
+  result = "true"
   result = json.dumps(result)
-
   return result

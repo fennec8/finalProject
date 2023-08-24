@@ -34,6 +34,7 @@ class GameOfWords {
     this.rowsArray = rowsArray;
     this.tiles = Array.from(rowsArray[0].children);
     this.word = word;
+    this.guessed_in = 0;
   }
 
   // fill first empty tile with letter
@@ -72,7 +73,7 @@ class GameOfWords {
   }
   
   // check if word list includes written word
-  checkWordList() {
+  async checkWordList() {
     const wordGuess = "".concat(
         this.tiles[0].innerText,
         this.tiles[1].innerText,
@@ -80,18 +81,21 @@ class GameOfWords {
         this.tiles[3].innerText,
         this.tiles[4].innerText
       ).toLowerCase();
-    // const result = this.postWordList(wordGuess);
-    // console.log(this.postWordList(wordGuess));
-    // if (!this.postWordList(wordGuess)) this.showWarningDiv("Not in word list");
-    // else this.checkRightLetters(wordGuess);
+
+    const response = await postWordList(wordGuess);
+
+    if (response == "false") this.showWarningDiv("Not in word list")
+    else this.checkRightLetters(wordGuess);
   }
 
   // check if guessed word has right letters
   checkRightLetters(wordGuess) {
     this.canDelete = false;
     this.canEnter = false;
+    this.guessed_in++;
     const thisWord = Array.from(this.word);
     const rowWord = Array.from(wordGuess);
+    
     // add styles to tiles
     let i = 0;
     let animationInt = setInterval(() => {
@@ -104,6 +108,7 @@ class GameOfWords {
       i++;
       if (i >= 5) clearInterval(animationInt);
     }, 400);
+
     // call this.win() if word is correct
     if (JSON.stringify(thisWord) == JSON.stringify(rowWord)) setTimeout(() => this.win(), 1800);
     else { // remove one row
@@ -162,6 +167,7 @@ class GameOfWords {
       modal.classList.add("modal-toggle"); 
       modalBg.classList.add("display");
     }, 3000);
+    this.updateStats("win");
   }
 
   // show warningDiv and modal
@@ -175,6 +181,7 @@ class GameOfWords {
       modal.classList.add("modal-toggle");
       modalBg.classList.add("display");
     }, 1500);
+    this.updateStats("lose");
   }
 
   // resets everything
@@ -222,21 +229,31 @@ class GameOfWords {
     }, 1300);
   }
 
-  // async postWordList(wordGuess) {
-  //   try {
-  //     const response = await fetch("/postWordList", {
-  //       method: "POST", // or 'PUT'
-  //       headers: {"Content-Type": "application/json"},
-  //       body: JSON.stringify(wordGuess),
-  //     });
-  
-  //     const result = await response.json();
-  //     console.log("Success:", result);
-  //     return result;
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-  // }
+  async updateStats(game) {
+    // Send info to db
+    let data;
+    if (game == "win") {
+      data = {
+        "played": "1",
+        "wins": "1",
+        "current_streak": "1",
+        "max_streak": "1",
+        "guessed_in": this.guessed_in,
+      }
+    }
+    else {
+      data = {
+        "played": "1",
+        "wins": "0",
+        "current_streak": "0",
+        "max_streak": "0",
+        "guessed_in": this.guessed_in,
+      }
+    }
+    const response = await postStats(data);
+    // Display reveived info on stats menu
+    console.log(response);
+  }
 }
 
 const gameOfWords = new GameOfWords();
@@ -249,8 +266,36 @@ async function getRandomWord() {
   try {
     const response = await fetch("/getWord")
       .then(response => response.json())
-      console.log("Word received", response);
       gameOfWords.startGame(response);
+      console.log(response);
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+
+// Check if guessed word is in db word list
+async function postWordList(wordGuess) {
+  try {
+    const response = await fetch("/postWordList", {
+      method: "POST", // or 'PUT'
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(wordGuess),
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+
+// Post stats to db
+async function postStats(data) {
+  try {
+    const response = await fetch("/postStats", {
+      method: "POST", // or 'PUT'
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(data),
+    });
+    return await response.json();
   } catch (error) {
     console.error("Error:", error);
   }
@@ -328,20 +373,3 @@ document.addEventListener("click", (e) => {
           (e.target.matches(".hamBtn") || !e.target.closest(".nav"))
   ) { nav.classList.remove("nav-toggle") }
 });
-
-async function postStats(data) {
-  try {
-    const response = await fetch("/postStats", {
-      method: "POST", // or 'PUT'
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(data),
-    });
-
-    const result = await response.json();
-    console.log("Success:", result);
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
-const data = { username: "example" };
-postStats(data);
