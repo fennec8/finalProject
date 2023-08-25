@@ -8,6 +8,17 @@ const navCloseBtn = document.querySelector(".nav-closeBtn");
 const statsBtn = document.querySelector(".statsBtn");
 const chartBtn = document.querySelector(".chartBtn");
 
+const statsPlayed = document.querySelector(".statsPlayed");
+const statsWins = document.querySelector(".statsWins");
+const statsCurrentStreak = document.querySelector(".statsCurrentStreak");
+const statsMaxStreak = document.querySelector(".statsMaxStreak");
+const guess1 = document.querySelector(".guess1");
+const guess2 = document.querySelector(".guess2");
+const guess3 = document.querySelector(".guess3");
+const guess4 = document.querySelector(".guess4");
+const guess5 = document.querySelector(".guess5");
+const guess6 = document.querySelector(".guess6");
+
 const winWords = [
   "great",
   "amazing",
@@ -252,7 +263,21 @@ class GameOfWords {
     }
     const response = await postStats(data);
     // Display reveived info on stats menu
-    console.log(response);
+    this.displayStats(response)
+  }
+
+  displayStats(data) {
+    statsPlayed.innerText = data["played"]
+    statsWins.innerText = Math.round(data["wins"] / data["played"] * 100)
+    statsCurrentStreak.innerText = data["current_streak"]
+    statsMaxStreak.innerText = data["max_streak"]
+
+    guess1.innerText = data["guessed_in1"]; 
+    guess2.innerText = data["guessed_in2"]; 
+    guess3.innerText = data["guessed_in3"]; 
+    guess4.innerText = data["guessed_in4"]; 
+    guess5.innerText = data["guessed_in5"]; 
+    guess6.innerText = data["guessed_in6"]; 
   }
 }
 
@@ -373,3 +398,16 @@ document.addEventListener("click", (e) => {
           (e.target.matches(".hamBtn") || !e.target.closest(".nav"))
   ) { nav.classList.remove("nav-toggle") }
 });
+
+async function displayUsersStatsOnce() {
+  try {
+    let response = await fetch("/getStats")
+      response = await response.json()
+      gameOfWords.displayStats(response)
+  } catch (error) {
+    console.log(error);
+  }
+}
+setTimeout(() => {
+  displayUsersStatsOnce();
+}, 500);

@@ -63,10 +63,12 @@ def register():
         )
         db.commit()
         # Remember user that has registered
-        cursor.execute("SELECT id FROM users WHERE username = %s;", (username,))
+        cursor.execute("SELECT * FROM users WHERE username = %s;", (username,))
         db.commit()
         result = cursor.fetchone()
         session["user_id"] = result[0]
+        session["username"] = result[1]
+        session["email"] = result[3]
         # Start new user's statistics
         cursor.execute("INSERT INTO statistics (user_id) VALUES (%s);", (session["user_id"],))
         db.commit()
@@ -97,7 +99,8 @@ def login():
         
         # Remember which user has logged in
         session["user_id"] = result[0]
-        print(session.get("user_id"))
+        session["username"] = result[1]
+        session["email"] = result[3]
 
         # Redirect user to homepage
         flash("You have successfully signed in!")
@@ -125,7 +128,11 @@ def game():
     cursor.execute("SELECT word FROM words ORDER BY RAND() LIMIT 1")
     db.commit()
     result = cursor.fetchone()[0]
-    return render_template("game.html", word=result)
+    if session.get("user_id") is None:
+        session["username"] = "Not logged in"
+        session["email"] = "Not logged in"
+    
+    return render_template("game.html", username=session["username"], email=session["email"])
 
 
 @app.route("/about")
@@ -137,12 +144,16 @@ def about():
 def postStats():
   # Save stats in db 
   data = request.get_json()
-  guessed_in = "guessed_in" + str(data["guessed_in"])
 
   if data["wins"] == "1": # Win stats
-      # Save dynamic data in dynamic columns
-      update_temp = str("UPDATE statistics SET played = played + 1, wins = wins + 1, current_streak = current_streak + 1,") + guessed_in + str("=%s+1 WHERE user_id=%s;")
-      update_data = (guessed_in, session["user_id"],)
+      # Save static (python) data in dynamic (sql) column
+      guessed_in = "guessed_in" + str(data["guessed_in"])
+      cursor.execute("SELECT * FROM statistics WHERE user_id=%s;", (session["user_id"],))
+      db.commit()
+      result = cursor.fetchone()
+      
+      update_temp = str("UPDATE statistics SET played = played + 1, wins = wins + 1, current_streak = current_streak + 1, ") + guessed_in + str("= %s + 1 WHERE user_id=%s;",)
+      update_data = (result[4 + data["guessed_in"]], session["user_id"],)
       cursor.execute(update_temp, update_data)
       db.commit()
       # Update streaks
@@ -157,6 +168,13 @@ def postStats():
           (session["user_id"],)
       )
       db.commit()
+
+  data = getStats()
+
+  return data
+
+@app.route("/getStats", methods=["GET"])
+def getStats():
   # Send data to display back to javascript
   cursor.execute("SELECT * FROM statistics WHERE user_id=%s;", (session["user_id"],))
   db.commit()
@@ -174,7 +192,6 @@ def postStats():
       "guessed_in6": result[10],
   }
   data = json.dumps(data)
-
   return data
 
 

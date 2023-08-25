@@ -83,6 +83,7 @@
     width: 375px;
     height: calc(100% - 66px);
     display: flex;
+    flex-direction: column;
     border-right: 1px solid rgba(150, 150, 150, 0.1);
     box-shadow: 0 0 5px rgba(0, 0, 0, .5);
     clip-path: inset(0 -10px 0 0);
@@ -607,4 +608,14 @@
   
   .display {
     display: unset;
+  }
+
+  .user_info {
+    margin-left: 12px;
+    font-weight: 700;
+  }
+  
+  .user_info span {
+    font-weight: 400;
+    color: var(--green);
   }

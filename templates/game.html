@@ -39,19 +39,19 @@
         <h1>STATISTICS</h1>
         <div class="stats">
           <div class="statsTextContainer">
-            <div class="statsPlayed statsBigText">5</div>
+            <div class="statsPlayed statsBigText">0</div>
             <div class="statsSmallText">Played</div>
           </div>
           <div class="statsTextContainer">
-            <div class="statsWinPrc statsBigText">60</div>
+            <div class="statsWins statsBigText">0</div>
             <div class="statsSmallText">Win %</div>
           </div>
           <div class="statsTextContainer">
-            <div class="statsCurrStreak statsBigText">0</div>
+            <div class="statsCurrentStreak statsBigText">0</div>
             <div class="statsSmallText">Current Streak</div>
           </div>
           <div class="statsTextContainer">
-            <div class="statsMaxStreak statsBigText">1</div>
+            <div class="statsMaxStreak statsBigText">0</div>
             <div class="statsSmallText">Max Streak</div>
           </div>
         </div>
@@ -60,27 +60,28 @@
         <div class="guesses">
           <div class="guess">
             <div class="guessNumber">1</div>
-            <div class="guessTimes">0</div>
+            <div class="guessTimes guess1">0</div>
           </div>
           <div class="guess">
             <div class="guessNumber">2</div>
-            <div class="guessTimes">0</div>
+            <div class="guessTimes guess2">0</div>
           </div>
           <div class="guess">
             <div class="guessNumber">3</div>
-            <div class="guessTimes">0</div>
+            <div class="guessTimes guess3">0</div>
           </div>
           <div class="guess">
             <div class="guessNumber">4</div>
-            <div class="guessTimes guessNumberGreen">2</div>
+            <div class="guessTimes guess4">0</div>
+            <!-- guessNumberGreen -->
           </div>
           <div class="guess">
             <div class="guessNumber">5</div>
-            <div class="guessTimes">0</div>
+            <div class="guessTimes guess5">0</div>
           </div>
           <div class="guess">
             <div class="guessNumber">6</div>
-            <div class="guessTimes">0</div>
+            <div class="guessTimes guess6">0</div>
           </div>
         </div>
 
@@ -160,6 +161,11 @@
             />
           </svg>
         </div>
+      </div>
+
+      <div class="user_info">
+        <p class="username">Username: <span>{{ username }}</span></p>
+        <p class="email">Email: <span>{{ email }}</span></p>
       </div>
 
       <div class="statsBtn-Div">
@@ -269,8 +275,6 @@
     </main>
 
     <script src="/static/js/game.js" type="module"></script>
-
-    <div id="word">{{ word }}</div>
 
   </body>
 </html>
