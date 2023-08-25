@@ -268,7 +268,9 @@ class GameOfWords {
 
   displayStats(data) {
     statsPlayed.innerText = data["played"]
-    statsWins.innerText = Math.round(data["wins"] / data["played"] * 100)
+    let wins = Math.round(data["wins"] / data["played"] * 100);
+    if (isNaN(wins)) statsWins.innerText = "0"
+    else statsWins.innerText = wins 
     statsCurrentStreak.innerText = data["current_streak"]
     statsMaxStreak.innerText = data["max_streak"]
 
