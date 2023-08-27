@@ -2,14 +2,14 @@
 #### Video Demo:  <URL HERE>
 #### Description:
 ## Game of Words - CS50x Final Project 2023
-Game of Words is a web based app that lets you play popular word guessing game
+Game of Words is a web based app that lets you play popular word guessing game.
 
 On the front page you can find:
-### Play button
+### Play
 Play button redirects you to the game page.
-### Create account button
+### Create account
 Create account button allows you to register your new account. Registration form validation is written in JavaScript. Your username must be unique and between 1 and 50 characters. The password must contain 8 to 30 characters, a number, an uppercase and lowercase letter, and a symbol. Finally, your email address must be unique and consist of a local part, an @ symbol, and a domain. All three fields with validation are required to create an account.
-### Sign in button
+### Sign in
 If you already have an account, you can sign in. To do that you will have to provide your login and password. As login you can write either your username or email adress. Both fields need to be correct. When you are logged in, you will no longer see the "create an account" button and "sign in" will change to "sign out", so you can easily log out if you wish.
 ### About
 The "About" page is just a page with a few words about the creator.
