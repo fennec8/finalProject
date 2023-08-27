@@ -142,6 +142,21 @@ def about():
 
 @app.route("/postStats", methods=["POST"])
 def postStats():
+  if session.get("user_id") is None:
+      data = {
+          "played": "0",
+          "wins": "0",
+          "current_streak": "0",
+          "max_streak": "0",
+          "guessed_in1": "0",
+          "guessed_in2": "0",
+          "guessed_in3": "0",
+          "guessed_in4": "0",
+          "guessed_in5": "0",
+          "guessed_in6": "0",
+      }
+      return data
+  
   # Save stats in db 
   data = request.get_json()
 
@@ -175,6 +190,20 @@ def postStats():
 
 @app.route("/getStats", methods=["GET"])
 def getStats():
+  if session.get("user_id") is None:
+      data = {
+          "played": "0",
+          "wins": "0",
+          "current_streak": "0",
+          "max_streak": "0",
+          "guessed_in1": "0",
+          "guessed_in2": "0",
+          "guessed_in3": "0",
+          "guessed_in4": "0",
+          "guessed_in5": "0",
+          "guessed_in6": "0",
+      }
+      return data
   # Send data to display back to javascript
   cursor.execute("SELECT * FROM statistics WHERE user_id=%s;", (session["user_id"],))
   db.commit()

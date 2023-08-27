@@ -152,6 +152,7 @@ class GameOfWords {
   }
 
   win() {
+    this.updateStats("win");
     setTimeout(() => {
       let i = 0;
       let animationInt = setInterval(() => {
@@ -178,7 +179,6 @@ class GameOfWords {
       modal.classList.add("modal-toggle"); 
       modalBg.classList.add("display");
     }, 3000);
-    this.updateStats("win");
   }
 
   // show warningDiv and modal
