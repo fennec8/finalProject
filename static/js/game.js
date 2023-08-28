@@ -78,25 +78,33 @@ class GameOfWords {
   // check if last tile is filled with letter
   checkEnoughLetters() {
     if (this.canEnter) {
-      if (this.tiles[4].innerText == "") this.showWarningDiv("Not enough letters")
-      else this.checkWordList();
+      if (this.tiles[4].innerText == "") {
+        this.showWarningDiv("Not enough letters");
+      }
+      else {
+        this.checkWordList();
+      }
     }
   }
   
   // check if word list includes written word
   async checkWordList() {
     const wordGuess = "".concat(
-        this.tiles[0].innerText,
-        this.tiles[1].innerText,
-        this.tiles[2].innerText,
-        this.tiles[3].innerText,
-        this.tiles[4].innerText
-      ).toLowerCase();
+      this.tiles[0].innerText,
+      this.tiles[1].innerText,
+      this.tiles[2].innerText,
+      this.tiles[3].innerText,
+      this.tiles[4].innerText
+    ).toLowerCase();
 
     const response = await postWordList(wordGuess);
 
-    if (response == "false") this.showWarningDiv("Not in word list")
-    else this.checkRightLetters(wordGuess);
+    if (response == "false") {
+      this.showWarningDiv("Not in word list");
+    }
+    else {
+      this.checkRightLetters(wordGuess);
+    }
   }
 
   // check if guessed word has right letters
@@ -111,23 +119,44 @@ class GameOfWords {
     let i = 0;
     let animationInt = setInterval(() => {
       this.tiles[i].classList.add("tileShowAnimation");
+
       // check if letter is in right spot, is in any spot or isn't
-      if (thisWord[i] == rowWord[i]) this.tiles[i].classList.add("tileBgGreen");
-      else if (thisWord.includes(rowWord[i])) this.tiles[i].classList.add("tileBgYellow");
-      else this.tiles[i].classList.add("tileBgGrey");
+      if (thisWord[i] == rowWord[i]) {
+        this.tiles[i].classList.add("tileBgGreen");
+      }
+      else if (thisWord.includes(rowWord[i])) {
+        this.tiles[i].classList.add("tileBgYellow");
+      }
+      else {
+        this.tiles[i].classList.add("tileBgGrey");
+      }
+
       // do it for all letters
       i++;
-      if (i >= 5) clearInterval(animationInt);
+      if (i >= 5) {
+        clearInterval(animationInt);
+      }
     }, 400);
 
     // call this.win() if word is correct
-    if (JSON.stringify(thisWord) == JSON.stringify(rowWord)) setTimeout(() => this.win(), 1800);
-    else { // remove one row
+    if (JSON.stringify(thisWord) == JSON.stringify(rowWord)) {
+      setTimeout(() => {
+        this.win()
+      }, 1800);
+    }
+    // else remove one row
+    else { 
       setTimeout(() => {
         this.rowsArray.shift();
+
         // if that row was the last one call this.lose()
-        if (this.rowsArray.length == 0) setTimeout(() => this.lose(), 500);
-        else { // otherwise continue the game
+        if (this.rowsArray.length == 0) {
+          setTimeout(() => {
+            this.lose()
+          }, 500);
+        }
+        // otherwise continue the game
+        else { 
           this.tiles = this.rowsArray[0].children;
           this.canDelete = true;
           this.canEnter = true;
@@ -143,9 +172,17 @@ class GameOfWords {
       for (let i = 0, l = tiles.length; i < l; i++) {
         let currentTile = tiles[i];
         let keyboardLetter = document.querySelector(`[data-key='${currentTile.innerText}']`);
+        
         // give keyboardLetters the same colors that tiles have
-        if (currentTile.classList.contains("tileBgGreen")) keyboardLetter.style.backgroundColor = "var(--green)";
-        else if (currentTile.classList.contains("tileBgYellow") && keyboardLetter.style.backgroundColor != "var(--green)") keyboardLetter.style.backgroundColor = "var(--yellow)";
+        if (currentTile.classList.contains("tileBgGreen")) {
+          keyboardLetter.style.backgroundColor = "var(--green)";
+        }
+        else if (
+          currentTile.classList.contains("tileBgYellow") && 
+          keyboardLetter.style.backgroundColor != "var(--green)"
+        ) {
+          keyboardLetter.style.backgroundColor = "var(--yellow)";
+        }
         else keyboardLetter.style.backgroundColor = "var(--border)";
       }
     }, 2500);
@@ -164,17 +201,23 @@ class GameOfWords {
         if (i >= 5) clearInterval(animationInt);
       }, 100);
     }, 1000);
+
     // pick complement at random
     let congrats = winWords[Math.floor(Math.random() * (winWords.length - 1))];
     let warningDiv = document.createElement("div");
+
     // show all winning animations
     setTimeout(() => {
       warningDiv.classList.add("warningDiv"); 
       warningDiv.innerText = congrats; 
       warningContainer.appendChild(warningDiv);
     }, 700);
-    setTimeout(() => warningDiv.classList.add("warningDivAnimation"), 2400);
-    setTimeout(() => warningContainer.removeChild(warningDiv), 2700);
+    setTimeout(() => {
+      warningDiv.classList.add("warningDivAnimation")
+    }, 2400);
+    setTimeout(() => {
+      warningContainer.removeChild(warningDiv)
+    }, 2700);
     setTimeout(() => {
       modal.classList.add("modal-toggle"); 
       modalBg.classList.add("display");
@@ -202,6 +245,7 @@ class GameOfWords {
     // reset every tile in every row
     for (const row of this.rowsArray) {
       this.tiles = row.children;
+
       for (const tile of this.tiles) {
         tile.className = "";
         tile.classList.add("tile");
@@ -210,14 +254,21 @@ class GameOfWords {
         tile.innerHTML = "";
       }
     }
+    
     // reset keyboard
-    letters.forEach((letter) => letter.style.backgroundColor = "var(--grey)");
+    letters.forEach((letter) => {
+      letter.style.backgroundColor = "var(--grey)"
+    });
+
     // hide modal
     modal.classList.remove("modal-toggle");
     modalBg.classList.remove("display");
+
     // delete lose warning div if there is one
     let warDiv = warningContainer.children[0];
-    if (warDiv != undefined) warningContainer.removeChild(warDiv);
+    if (warDiv != undefined) {
+      warningContainer.removeChild(warDiv);
+    }
   }
 
   showWarningDiv(text) {
@@ -226,11 +277,13 @@ class GameOfWords {
     setTimeout(() => {
       this.rowsArray[0].classList.remove("rowAnimation");
     }, 500);
+
     // create warning div
     let warningDiv = document.createElement("div");
     warningDiv.classList.add("warningDiv");
     warningDiv.innerText = text;
     warningContainer.appendChild(warningDiv);
+
     // show and delete warning div from DOM
     setTimeout(() => {
       warningDiv.classList.add("warningDivAnimation");
@@ -281,6 +334,32 @@ class GameOfWords {
     guess5.innerText = data["guessed_in5"]; 
     guess6.innerText = data["guessed_in6"]; 
   }
+
+  guessDistibution() {
+    const guesses = document.querySelectorAll('.guessTimes');
+    for (const guess of guesses) {
+      guess.classList.remove('guessNumberGreen');
+    }
+    // Assign which guessed_in has the most wins
+    let max = Number(guesses[0].innerText);
+    let biggestGuess = guesses[0];
+    for (let i = 1, l = guesses.length; i < l; i++) {
+      if (Number(guesses[i].innerText) > max) {
+        max = Number(guesses[i].innerText);
+        biggestGuess = guesses[i];
+      }
+    }
+    // Change the width depending on the amount of wins
+    for (const guess of guesses) {
+      if (guess == biggestGuess) {
+        continue;
+      }
+      if (guess.innerText != 0) {
+        guess.style.width = (Number(guess.innerText) / Number(biggestGuess.innerText) * 100) + "%";
+      }
+    }
+    biggestGuess.classList.add('guessNumberGreen');
+  }
 }
 
 const gameOfWords = new GameOfWords();
@@ -292,9 +371,9 @@ window.addEventListener("DOMContentLoaded", getRandomWord());
 async function getRandomWord() {
   try {
     const response = await fetch("/getWord")
-      .then(response => response.json())
-      gameOfWords.startGame(response);
-      console.log(response);
+    .then(response => response.json())
+    gameOfWords.startGame(response);
+    console.log(response);
   } catch (error) {
     console.error("Error:", error);
   }
@@ -331,9 +410,15 @@ async function postStats(data) {
 // write letters using mouse
 letters.forEach((letter) => {
   letter.addEventListener("click", () => {
-    if (letter.dataset.key === "backspace") gameOfWords.deleteLetter();
-    else if (letter.dataset.key === "enter") gameOfWords.checkEnoughLetters();
-    else gameOfWords.writeLetter(letter.dataset.key);
+    if (letter.dataset.key === "backspace") {
+      gameOfWords.deleteLetter();
+    }
+    else if (letter.dataset.key === "enter") {
+      gameOfWords.checkEnoughLetters();
+    }
+    else {
+      gameOfWords.writeLetter(letter.dataset.key);
+    }
   });
 });
 
@@ -348,17 +433,28 @@ let key;
 // keyboard events - write/delete letters using keyboard, check for win with enter
 document.addEventListener("keydown", (e) => {
   // prevent holding key
-  if (e.key == key) return;
+  if (e.key == key) {
+    return;
+  }
   key = e.key;
-
-  if (/^[a-z]+$/.test(e.key)) gameOfWords.writeLetter(e.key.toUpperCase());
-  if (e.key === "Backspace") gameOfWords.deleteLetter();
-  if (e.key === "Enter") gameOfWords.checkEnoughLetters(), e.preventDefault();
+  
+  if (/^[a-z]+$/.test(e.key)) {
+    gameOfWords.writeLetter(e.key.toUpperCase());
+  }
+  if (e.key === "Backspace") {
+    gameOfWords.deleteLetter();
+  }
+  if (e.key === "Enter") {
+    gameOfWords.checkEnoughLetters();
+    e.preventDefault();
+  }
 });
 
 document.addEventListener("keyup", () => key = "");
 
-navCloseBtn.addEventListener("click", () => nav.classList.remove("nav-toggle"));
+navCloseBtn.addEventListener("click", () => {
+  nav.classList.remove("nav-toggle")
+});
 
 statsBtn.addEventListener("click", () => {
   nav.classList.remove("nav-toggle");
@@ -384,32 +480,40 @@ playBtn.addEventListener("click", () => {
 // close modal on btn or outside the modal
 document.addEventListener("click", (e) => {
   if (
-      modal.classList.contains("modal-toggle") &&
-      (e.target.matches(".modal-Btn") || !e.target.closest(".modal"))
+    modal.classList.contains("modal-toggle") &&
+    (e.target.matches(".modal-Btn") || !e.target.closest(".modal"))
   ) {
     modal.classList.remove("modal-toggle");
     modalBg.classList.remove("display");
   }
 });
-
+  
 // opening/closing nav
 document.addEventListener("click", (e) => {
-  if (e.target.classList.contains("hamBtn")) nav.classList.toggle("nav-toggle")
+  if (e.target.classList.contains("hamBtn")) {
+    nav.classList.toggle("nav-toggle")
+  }
   else if (
-          nav.classList.contains("nav-toggle") &&
-          (e.target.matches(".hamBtn") || !e.target.closest(".nav"))
-  ) { nav.classList.remove("nav-toggle") }
+    nav.classList.contains("nav-toggle") &&
+    (e.target.matches(".hamBtn") || !e.target.closest(".nav"))
+  ) { 
+    nav.classList.remove("nav-toggle") 
+  }
 });
 
 async function displayUsersStatsOnce() {
   try {
     let response = await fetch("/getStats")
-      response = await response.json()
-      gameOfWords.displayStats(response)
+    response = await response.json()
+    gameOfWords.displayStats(response)
   } catch (error) {
     console.log(error);
   }
 }
 setTimeout(() => {
   displayUsersStatsOnce();
-}, 500);
+}, 200);
+
+setTimeout(() => {
+  gameOfWords.guessDistibution();
+}, 500)
