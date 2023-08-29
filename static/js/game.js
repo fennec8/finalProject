@@ -190,6 +190,7 @@ class GameOfWords {
 
   win() {
     this.updateStats("win");
+
     setTimeout(() => {
       let i = 0;
       let animationInt = setInterval(() => {
@@ -226,6 +227,8 @@ class GameOfWords {
 
   // show warningDiv and modal
   lose() {
+    this.updateStats("lose");
+
     let warningDiv = document.createElement("div");
     warningDiv.classList.add("warningDiv");
     warningDiv.innerText = this.word;
@@ -235,7 +238,6 @@ class GameOfWords {
       modal.classList.add("modal-toggle");
       modalBg.classList.add("display");
     }, 1500);
-    this.updateStats("lose");
   }
 
   // resets everything
@@ -317,6 +319,7 @@ class GameOfWords {
     const response = await postStats(data);
     // Display reveived info on stats menu
     this.displayStats(response)
+    this.guessDistibution();
   }
 
   displayStats(data) {
@@ -349,16 +352,15 @@ class GameOfWords {
         biggestGuess = guesses[i];
       }
     }
+    if (biggestGuess.innerText != "0") {
+      biggestGuess.classList.add('guessNumberGreen');
+    }
     // Change the width depending on the amount of wins
     for (const guess of guesses) {
-      if (guess == biggestGuess) {
-        continue;
-      }
-      if (guess.innerText != 0) {
+       if (guess.innerText != "0") {
         guess.style.width = (Number(guess.innerText) / Number(biggestGuess.innerText) * 100) + "%";
       }
     }
-    biggestGuess.classList.add('guessNumberGreen');
   }
 }
 
@@ -516,4 +518,4 @@ setTimeout(() => {
 
 setTimeout(() => {
   gameOfWords.guessDistibution();
-}, 500)
+}, 400);
