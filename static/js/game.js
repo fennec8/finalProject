@@ -375,7 +375,6 @@ async function getRandomWord() {
     const response = await fetch("/getWord")
     .then(response => response.json())
     gameOfWords.startGame(response);
-    console.log(response);
   } catch (error) {
     console.error("Error:", error);
   }

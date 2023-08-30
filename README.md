@@ -1,5 +1,5 @@
 # Game of Words
-#### Video Demo:  <URL HERE>
+#### Video Demo:  <https://youtu.be/dgIfH8IkgPE>
 #### Description:
 ## Game of Words - CS50x Final Project 2023
 Game of Words is a web based app that lets you play popular word guessing game.
